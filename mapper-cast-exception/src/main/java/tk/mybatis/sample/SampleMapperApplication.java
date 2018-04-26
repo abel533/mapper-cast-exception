@@ -51,15 +51,8 @@ public class SampleMapperApplication {
     @RequestMapping("/{id}")
     @ResponseBody
     public Country byId(@PathVariable("id") Long id) {
-        Thread.currentThread().getThreadGroup()
-        //为什么这里的 Country 是 RestartClassLoader 中的呢？
-        //RestartLauncher 线程设置的 RestartClassLoader，然后重新调用这里的 main(String[] args) 方法
-        //通过某个线程创建子线程时，这些线程会和父线程使用相同的 ClassLoader
         Object obj = countryMapper.selectByPrimaryKey(id);
         Country country = countryMapper.selectByPrimaryKey(id);
-        System.out.println(CountryMapper.class.getClassLoader());
-        System.out.println(countryMapper.getClass().getClassLoader());
-        System.out.println(country.getClass().getClassLoader());
         return country;
     }
 }
