@@ -33,7 +33,7 @@ import java.io.Serializable;
  * Update: liuzh(2014-06-06 13:38)
  */
 public class Country implements Serializable {
-    private static final long serialVersionUID = 6569081236403751407L;
+    private static final long serialVersionUID = 1L;
     @Id
     private Long   id;
     private String countryname;
@@ -62,4 +62,5 @@ public class Country implements Serializable {
     public void setCountrycode(String countrycode) {
         this.countrycode = countrycode;
     }
+
 }

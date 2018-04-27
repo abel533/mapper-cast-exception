@@ -20,7 +20,7 @@
 
 此时使用 Devtools 时，RestartClassLoader 会加载并检测这两个项目的变化，mapper 项目会使用 AppClassLoader 加载，AppClassLoader 启动时也会加载前两个项目中的类。
 
->RestartClassLoader 实现中，是把 AppClassLoader 已经加载的类中，所有以 `file:` 开头和 `/` 结尾的类路径加载到了 RestartClassLoader 中，所以 AppClassLoader 实际上是全的。后续通过 RestartClassLoader 加载时，会先判断 RestartClassLoader 中是否包含类，这里有限使用 RestartClassLoader 提供的类，如果不存在才会通过 parent（AppClassLoader）查找。
+>RestartClassLoader 实现中，是把 AppClassLoader 已经加载的类中，所有以 `file:` 开头和 `/` 结尾的类路径（非 `.jar` 文件，也就是所有类路径中的目录）加载到了 RestartClassLoader 中，所以 AppClassLoader 实际上是全的。后续通过 RestartClassLoader 加载时，会先判断 RestartClassLoader 中是否包含类，这里优先使用 RestartClassLoader 提供的类，如果不存在才会通过 parent（AppClassLoader）查找。
 
 在下面的方法中，当通过 AppClassLoader 加载的 mapper 调用返回 model 时，该 model 类是由 AppClassLoader 加载的。而下面代码中的 Country 是 RestartClassLoader 加载的，由于是不同的 ClassLoader，因此就会抛出异常。
 
