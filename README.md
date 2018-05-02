@@ -40,7 +40,9 @@ public Country byId(@PathVariable("id") Long id) {
 
 因为 Country 是在当前线程加载的，而加载类的 ClassLoader 默认就是当前线程的 ContextClassLoader。
 
-Devtools 在启动时（你运行的 `main` 方法），悄悄的创建了一个新的 `restartedMain` 线程，然后把你启动的 `main` 线程终止了。新的 `restartedMain` 线程使用的就是 RestartClassLoader，后续通过该线程创建的其他线程也都是这个类加载器。因此执行上面代码的方法时，Country 就是 RestartClassLoader 加载的。
+Devtools 在启动时（你运行的 `main` 方法），悄悄的创建了一个新的 `restartedMain` 线程，然后把你启动的 `main` 线程终止了。新的 `restartedMain` 线程使用的就是 RestartClassLoader，后续通过该线程创建的其他线程也都是这个类加载器（Spring 内部 ClassUtils 会 优先使用这个类加载器）。重启时的 `Application` 启动类就是由这个类加载器加载的，后续通过该类加载的其他类都使用的这一个类加载器。所以 Country 就是 RestartClassLoader 加载的。
+
+>这里原来说明有误，代码中的类是由代码所在类的加载器加载的，不是 Thread 的contextClassLoader。
 
 到这里就应该明白了，实际上这个问题产生的原因和通用 Mapper 没有关系，在通用 Mapper 中增加的配置也没有用。
 
